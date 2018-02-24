@@ -12,18 +12,22 @@ program: code EOF;
 code: line+;
 line: COMMENT | command+;
 
-command: range | arith;
+command: range_ | integer | arith_operator;
 
+integer: NUMBER;
 // 0:5, :5 -> [0, 1, 2, 3, 4, 5]
-range: NUMBER? COLON NUMBER;
+range_: RANGE;
 
-arith: NUMBER+ OP=(ADD | SUB | MUL | DIV);
+// arith: NUMBER+ OP=(ADD | SUB | MUL | DIV);
+arith_operator: ADD | SUB | MUL | DIV;
 
 /*
     Lexer Rules
  */
 
 COMMENT: '#' ~[\r\n]* -> skip;
+
+RANGE: NUMBER? COLON NUMBER;
 
 NUMBER: [0-9]+;
 
@@ -39,3 +43,6 @@ ADD: '+';
 SUB: '-';
 MUL: '*';
 DIV: '/';
+
+// Other
+WS: [ \t\r\n\f]+ -> skip;
