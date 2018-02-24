@@ -99,3 +99,16 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+# ANTLR4 files
+JaR.tokens
+JaRLexer.py
+JaRLexer.tokens
+JaRListener.py
+JaRParser.py
