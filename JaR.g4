@@ -39,6 +39,9 @@ ALPH_LOW: 'z';
 ALPH_UP: 'Z';
 ALPH: 'A';
 
+FOR: 'A';
+FORALL: 'E';
+
 IF: '?';
 
 EQ: '=';
