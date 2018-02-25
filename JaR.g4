@@ -14,9 +14,10 @@ line: COMMENT | command+;
 
 command: range_ | integer | if_stmt | arith_operator;
 
-integer: NUMBER;
 // 0:5, :5 -> [0, 1, 2, 3, 4, 5]
 range_: RANGE;
+
+integer: NUMBER;
 
 if_stmt: IF (EQ | GT | LT | GTE | LTE);
 
@@ -52,6 +53,8 @@ NGT: '!>';
 NLT: '!<';
 
 OR: '|';
+
+LOOP: '@';
 
 RANDOM: 'r';
 

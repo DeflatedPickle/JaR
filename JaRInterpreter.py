@@ -18,6 +18,13 @@ class JaRInterpreter(JaRListener):
     def exitInteger(self, ctx:JaRParser.IntegerContext):
         self.stack.push(int(ctx.NUMBER().getText()))
 
+    def exitRange_(self, ctx:JaRParser.Range_Context):
+        new_ctx = ctx.getText().split(":")
+        first = int(new_ctx[0]) if new_ctx[0] != "" else 0
+        second = int(new_ctx[-1])
+
+        self.stack.push(range(first, second))
+
     def exitArith_operator(self, ctx:JaRParser.Arith_operatorContext):
         second = self.stack.pop()
         first = self.stack.pop()
@@ -81,7 +88,7 @@ class JaRInterpreter(JaRListener):
 
 
 if __name__ == "__main__":
-    lexer = JaRLexer(antlr4.FileStream("examples/comparison.jrr"))
+    lexer = JaRLexer(antlr4.FileStream("examples/range.jrr"))
     stream = antlr4.CommonTokenStream(lexer)
     parser = JaRParser(stream)
     tree = parser.program()
