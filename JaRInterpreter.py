@@ -34,6 +34,31 @@ class JaRInterpreter(JaRListener):
         elif ctx.DIV():
             self.stack.push(first // second)
 
+    def enterIf_stmt(self, ctx:JaRParser.If_stmtContext):
+        second = self.stack.pop()
+        first = self.stack.pop()
+
+        if ctx.EQ():
+            if first == second:
+                self.stack.push(True)
+
+            else:
+                self.stack.push(False)
+
+        elif ctx.GT():
+            if first > second:
+                self.stack.push(True)
+
+            else:
+                self.stack.push(False)
+
+        elif ctx.LT():
+            if first < second:
+                self.stack.push(True)
+
+            else:
+                self.stack.push(False)
+
     # def enterCommand(self, ctx:JaRParser.CommandContext):
     #     print(self.stack)
 
@@ -42,7 +67,7 @@ class JaRInterpreter(JaRListener):
 
 
 if __name__ == "__main__":
-    lexer = JaRLexer(antlr4.FileStream("examples/arithmetic.jrr"))
+    lexer = JaRLexer(antlr4.FileStream("examples/comparison.jrr"))
     stream = antlr4.CommonTokenStream(lexer)
     parser = JaRParser(stream)
     tree = parser.program()
