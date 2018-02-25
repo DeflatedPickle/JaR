@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """"""
 
+import random
 import antlr4
 
 from JaRLexer import JaRLexer
@@ -16,12 +17,12 @@ class JaRInterpreter(JaRListener):
         self.stack = stack.Stack()
 
     def exitInteger(self, ctx:JaRParser.IntegerContext):
-        self.stack.push(int(ctx.NUMBER().getText()))
+        self.stack.push(int(ctx.NUMBER().getText()) if ctx.NUMBER().getText() != "r" else random.randint(0, 100))
 
     def exitRange_(self, ctx:JaRParser.Range_Context):
         new_ctx = ctx.getText().split(":")
-        first = int(new_ctx[0]) if new_ctx[0] != "" else 0
         second = int(new_ctx[-1])
+        first = (int(new_ctx[0]) if new_ctx[0] != "" else 0) if new_ctx[0] != "r" else random.randint(0, second)
 
         self.stack.push(range(first, second))
 

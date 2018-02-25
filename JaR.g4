@@ -32,7 +32,7 @@ COMMENT: '#' ~[\r\n]* -> skip;
 
 RANGE: NUMBER? COLON NUMBER;
 
-NUMBER: [0-9]+;
+NUMBER: [0-9]+ | RANDOM;
 
 // Keywords
 ALPH_LOW: 'z';
