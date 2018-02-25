@@ -59,8 +59,22 @@ class JaRInterpreter(JaRListener):
             else:
                 self.stack.push(False)
 
-    # def enterCommand(self, ctx:JaRParser.CommandContext):
-    #     print(self.stack)
+        elif ctx.GTE():
+            if first >= second:
+                self.stack.push(True)
+
+            else:
+                self.stack.push(False)
+
+        elif ctx.LTE():
+            if first < second:
+                self.stack.push(True)
+
+            else:
+                self.stack.push(False)
+
+    def enterCommand(self, ctx:JaRParser.CommandContext):
+        print(self.stack)
 
     def exitProgram(self, ctx:JaRParser.ProgramContext):
         print(self.stack.items[-1])

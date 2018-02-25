@@ -18,7 +18,7 @@ integer: NUMBER;
 // 0:5, :5 -> [0, 1, 2, 3, 4, 5]
 range_: RANGE;
 
-if_stmt: IF (EQ | GT | LT);
+if_stmt: IF (EQ | GT | LT | GTE | LTE);
 
 // arith: NUMBER+ OP=(ADD | SUB | MUL | DIV);
 arith_operator: ADD | SUB | MUL | DIV;
@@ -40,11 +40,18 @@ ALPH: 'A';
 
 IF: '?';
 
-EQ: 'e';
-GT: 'g';
-LT: 'l';
+EQ: '=';
+GT: '>';
+LT: '<';
 
-OR: 'o';
+GTE: '>=';
+LTE: '<=';
+
+NEQ: '!=';
+NGT: '!>';
+NLT: '!<';
+
+OR: '|';
 
 RANDOM: 'r';
 
