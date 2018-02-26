@@ -12,7 +12,9 @@ program: code EOF;
 code: line+;
 line: COMMENT | command+;
 
-command: range_ | integer | if_stmt | arith_operator;
+command: range_ | integer | if_stmt | arith_operator | for_all_block | ITEM | print_;
+
+print_: PRINT;
 
 // 0:5, :5 -> [0, 1, 2, 3, 4, 5]
 range_: RANGE;
@@ -23,6 +25,8 @@ if_stmt: IF (EQ | GT | LT | GTE | LTE);
 
 // arith: NUMBER+ OP=(ADD | SUB | MUL | DIV);
 arith_operator: ADD | SUB | MUL | DIV;
+
+for_all_block: FORALL OBLOCK line* CBLOCK;
 
 /*
     Lexer Rules
@@ -41,6 +45,8 @@ ALPH: 'A';
 
 FOR: 'A';
 FORALL: 'E';
+
+ITEM: 'i';
 
 IF: '?';
 
@@ -61,6 +67,8 @@ LOOP: '@';
 
 RANDOM: 'r';
 
+PRINT: '`';
+
 // Punctuation
 COLON: ':';
 
@@ -68,6 +76,9 @@ ADD: '+';
 SUB: '-';
 MUL: '*';
 DIV: '/';
+
+OBLOCK: '{';
+CBLOCK: '}';
 
 // Other
 WS: [ \t\r\n\f]+ -> skip;
