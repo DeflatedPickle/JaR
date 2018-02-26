@@ -4,6 +4,7 @@
 
 import random
 import antlr4
+from antlr4.tree import Tree
 
 from JaRLexer import JaRLexer
 from JaRListener import JaRListener
@@ -15,6 +16,9 @@ import stack
 class JaRInterpreter(JaRListener):
     def __init__(self):
         self.stack = stack.Stack()
+
+    def enterPrint_(self, ctx:JaRParser.Print_Context):
+        print(self.stack.items[-1])
 
     def exitInteger(self, ctx:JaRParser.IntegerContext):
         self.stack.push(int(ctx.NUMBER().getText()) if ctx.NUMBER().getText() != "r" else random.randint(0, 100))
@@ -81,6 +85,17 @@ class JaRInterpreter(JaRListener):
             else:
                 self.stack.push(False)
 
+    def enterFor_all_block(self, ctx:JaRParser.For_all_blockContext):
+        looper = self.stack.pop()
+
+        if type(looper) != range:
+            looper = range(0, looper)
+
+        for item in looper:
+            for line in ctx.line():
+                # self.visitTerminal(line)
+                Tree.ParseTreeVisitor().visitChildren(line)
+
     def enterCommand(self, ctx:JaRParser.CommandContext):
         print(self.stack)
 
@@ -89,7 +104,7 @@ class JaRInterpreter(JaRListener):
 
 
 if __name__ == "__main__":
-    lexer = JaRLexer(antlr4.FileStream("examples/range.jrr"))
+    lexer = JaRLexer(antlr4.FileStream("examples/for_all.jrr"))
     stream = antlr4.CommonTokenStream(lexer)
     parser = JaRParser(stream)
     tree = parser.program()
