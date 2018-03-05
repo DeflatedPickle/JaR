@@ -3,19 +3,21 @@
 """"""
 
 import random
+
 import antlr4
 from antlr4.tree import Tree
 
 from JaRLexer import JaRLexer
 from JaRListener import JaRListener
 from JaRParser import JaRParser
-
-import stack
+from util import stack, prime
 
 
 class JaRInterpreter(JaRListener):
     def __init__(self):
         self.stack = stack.Stack()
+
+        self.variables = {}
 
     def enterPrint_(self, ctx:JaRParser.Print_Context):
         print(self.stack.items[-1])
@@ -29,6 +31,26 @@ class JaRInterpreter(JaRListener):
         first = (int(new_ctx[0]) if new_ctx[0] != "" else 0) if new_ctx[0] != "r" else random.randint(0, second)
 
         self.stack.push(range(first, second))
+
+    def enterPrime(self, ctx:JaRParser.PrimeContext):
+        if prime.is_prime(self.stack.pop()):
+            self.stack.push(True)
+
+        else:
+            self.stack.push(False)
+
+    def enterInput_(self, ctx:JaRParser.Input_Context):
+        in_ = input()
+
+        try:
+            self.stack.push(int(in_))
+
+        except ValueError:
+            self.stack.push(in_)
+
+    def enterVariable(self, ctx:JaRParser.VariableContext):
+        self.variables[ctx.VARIABLE()] = self.stack.pop()
+        self.stack.push(ctx.VARIABLE())
 
     def exitArith_operator(self, ctx:JaRParser.Arith_operatorContext):
         second = self.stack.pop()
@@ -91,7 +113,7 @@ class JaRInterpreter(JaRListener):
         if type(looper) != range:
             looper = range(0, looper)
 
-        for item in looper:
+        for _ in looper:
             for line in ctx.line():
                 # self.visitTerminal(line)
                 Tree.ParseTreeVisitor().visitChildren(line)
@@ -100,11 +122,20 @@ class JaRInterpreter(JaRListener):
         print(self.stack)
 
     def exitProgram(self, ctx:JaRParser.ProgramContext):
-        print(self.stack.items[-1])
+        stack = self.stack.items[-1]
+
+        if type(stack) is int:
+            print(stack)
+
+        elif type(stack) is bool:
+            print(stack)
+
+        else:
+            print(self.variables[stack])
 
 
 if __name__ == "__main__":
-    lexer = JaRLexer(antlr4.FileStream("examples/for_all.jrr"))
+    lexer = JaRLexer(antlr4.FileStream("examples/input.jrr"))
     stream = antlr4.CommonTokenStream(lexer)
     parser = JaRParser(stream)
     tree = parser.program()

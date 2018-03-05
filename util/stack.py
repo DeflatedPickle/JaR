@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """"""
 
+
 class Stack(object):
     def __init__(self):
         self.items = []
